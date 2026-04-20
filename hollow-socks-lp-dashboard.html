@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hollow Socks — Landing Page Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0e;
+    --surface: #141418;
+    --surface2: #1c1c22;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0eeea;
+    --muted: #7a7880;
+    --dim: #4a4855;
+    --green: #6ee7a0;
+    --green-bg: rgba(110,231,160,0.08);
+    --green-border: rgba(110,231,160,0.2);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,0.08);
+    --red-border: rgba(248,113,113,0.2);
+    --amber: #fbbf24;
+    --amber-bg: rgba(251,191,36,0.08);
+    --amber-border: rgba(251,191,36,0.2);
+    --blue: #60a5fa;
+    --blue-bg: rgba(96,165,250,0.08);
+    --blue-border: rgba(96,165,250,0.2);
+    --accent: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+  .logo {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); }
+  .header-meta { display: flex; align-items: center; gap: 20px; }
+  .week-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 5px 12px;
+    color: var(--muted);
+  }
+  .week-pill strong { color: var(--text); }
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .tab {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    padding: 12px 16px;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .15s;
+    user-select: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  /* MAIN */
+  .main { padding: 28px 32px; max-width: 1200px; }
+  /* SUMMARY CARDS */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .stat-delta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .stat-delta.up { color: var(--green); }
+  .stat-delta.dn { color: var(--red); }
+  .stat-delta.flat { color: var(--muted); }
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .section-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  /* TABLE */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 11px 14px;
+    text-align: right;
+    font-weight: 400;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  thead th:first-child { text-align: left; }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td {
+    padding: 11px 14px;
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  tbody td:first-child { text-align: left; font-family: 'Syne', sans-serif; }
+  .page-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .page-slug { font-size: 10px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
+  .roas-good { color: var(--green); }
+  .roas-warn { color: var(--amber); }
+  .roas-bad  { color: var(--red); }
+  .delta-up  { color: var(--green); }
+  .delta-dn  { color: var(--red); }
+  .delta-flat { color: var(--muted); }
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge.win   { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .badge.lose  { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border); }
+  .badge.watch { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .badge.new   { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-border); }
+  /* GRID 2-COL */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  /* DROPPED ROW */
+  .dropped-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dropped-row:last-child { border-bottom: none; }
+  /* ALERT BANNER */
+  .alert {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    border: 1px solid;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .alert.red { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+  .alert.green { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+  .alert .alert-label { font-weight: 600; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+  .alert .alert-body { color: var(--text); font-size: 12px; line-height: 1.6; }
+  /* PANES */
+  .pane { display: none; }
+  .pane.active { display: block; }
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 16px 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Hollow <span>Socks</span> — LP Report</div>
+  <div class="header-meta">
+    <div class="week-pill">Prior week <strong>vs</strong> This week</div>
+    <div class="week-pill">Paid Social · All Pages</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">Overview</div>
+  <div class="tab" onclick="showTab('winners')">Winners</div>
+  <div class="tab" onclick="showTab('losers')">Losers</div>
+  <div class="tab" onclick="showTab('new')">Net New</div>
+  <div class="tab" onclick="showTab('dropped')">Dropped</div>
+  <div class="tab" onclick="showTab('all')">All Pages</div>
+</div>
+
+<div class="main">
+
+<!-- OVERVIEW -->
+<div class="pane active" id="pane-overview">
+
+  <div class="summary-row">
+    <div class="stat-card">
+      <div class="stat-label">Total Spend TW</div>
+      <div class="stat-value">$375K</div>
+      <div class="stat-delta dn">↑ +$43K vs prior week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Blended ROAS</div>
+      <div class="stat-value">1.57x</div>
+      <div class="stat-delta dn">↓ from 1.87x prior wk</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Purchases</div>
+      <div class="stat-value">4,867</div>
+      <div class="stat-delta up">↑ +138 vs prior wk</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg CPP</div>
+      <div class="stat-value">$77</div>
+      <div class="stat-delta dn">↑ from ~$61 prior wk</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Net New Landers</div>
+      <div class="stat-value">10</div>
+      <div class="stat-delta flat">pages not in prior wk</div>
+    </div>
+  </div>
+
+  <div class="alert red">
+    <div class="alert-label">⚠ Action needed</div>
+    <div class="alert-body">Blended ROAS dropped 0.30 points week over week. Spend increased $43K but efficiency fell. G1 ($105.6K at 1.37x and declining) is the primary drag. Three new landers launched below 1.2x — infomercial-v1, SP2, and trades-v2 should be cut or paused.</div>
+  </div>
+
+  <div class="alert green">
+    <div class="alert-label">↑ Opportunity</div>
+    <div class="alert-body">Ad-N1 launched at 2.86x ROAS with $37.56 CPP. WL1 jumped from 1.49x to 3.19x. Both are small budget — these angles are worth scaling. Evergreen Multi held 2.14x on $36.8K spend, confirming it as the most reliable high-spend page.</div>
+  </div>
+
+  <div class="section-header"><div class="section-title">Quick summary by status</div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Page</th><th>Spend TW</th><th>ROAS TW</th><th>ROAS PW</th><th>Delta</th><th>CPP</th><th>CVR</th><th>Status</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><div class="page-name">Evergreen Multi</div><div class="page-slug">a111-evergreen-multi</div></td><td>$36.8K</td><td class="roas-good">2.14x</td><td>2.10x</td><td class="delta-up">+0.04</td><td>$50.38</td><td>4.00%</td><td><span class="badge win">win</span></td></tr>
+        <tr><td><div class="page-name">Ad-N1</div><div class="page-slug">ad-n1</div></td><td>$2.1K</td><td class="roas-good">2.86x</td><td>—</td><td class="delta-flat">new</td><td>$37.56</td><td>4.17%</td><td><span class="badge win">win</span></td></tr>
+        <tr><td><div class="page-name">WL1</div><div class="page-slug">10r-compression-wl1</div></td><td>$941</td><td class="roas-good">3.19x</td><td>1.49x</td><td class="delta-up">+1.70</td><td>$31.36</td><td>6.16%</td><td><span class="badge win">win</span></td></tr>
+        <tr><td><div class="page-name">Comp Advertorial</div><div class="page-slug">comp-advertorial</div></td><td>$12.3K</td><td class="roas-good">1.68x</td><td>1.80x</td><td class="delta-dn">-0.12</td><td>$61.56</td><td>3.31%</td><td><span class="badge win">win</span></td></tr>
+        <tr><td><div class="page-name">Compression W</div><div class="page-slug">10r-compression-w</div></td><td>$8.8K</td><td class="roas-good">1.76x</td><td>1.92x</td><td class="delta-dn">-0.16</td><td>$60.42</td><td>4.14%</td><td><span class="badge win">win</span></td></tr>
+        <tr><td><div class="page-name">10r Compression</div><div class="page-slug">10r-compression</div></td><td>$36.5K</td><td class="roas-warn">1.93x</td><td>2.68x</td><td class="delta-dn">-0.75</td><td>$54.97</td><td>2.39%</td><td><span class="badge watch">watch</span></td></tr>
+        <tr><td><div class="page-name">Compression Shop</div><div class="page-slug">10r-compression-shop</div></td><td>$16.7K</td><td class="roas-warn">1.37x</td><td>1.69x</td><td class="delta-dn">-0.32</td><td>$73.93</td><td>2.60%</td><td><span class="badge watch">watch</span></td></tr>
+        <tr><td><div class="page-name">10r Compression G1</div><div class="page-slug">10r-compression-g1 · 276 ads</div></td><td>$105.6K</td><td class="roas-bad">1.37x</td><td>1.54x</td><td class="delta-dn">-0.17</td><td>$74.94</td><td>1.92%</td><td><span class="badge lose">loser</span></td></tr>
+        <tr><td><div class="page-name">10r Trades</div><div class="page-slug">10r-trades</div></td><td>$34.3K</td><td class="roas-bad">1.36x</td><td>1.52x</td><td class="delta-dn">-0.16</td><td>$77.15</td><td>1.62%</td><td><span class="badge lose">loser</span></td></tr>
+        <tr><td><div class="page-name">Infomercial v1</div><div class="page-slug">infomercial-v1</div></td><td>$1.9K</td><td class="roas-bad">0.75x</td><td>—</td><td class="delta-flat">new</td><td>$148.69</td><td>1.18%</td><td><span class="badge lose">cut</span></td></tr>
+        <tr><td><div class="page-name">Compression SP2</div><div class="page-slug">10r-compression-sp2</div></td><td>$8.4K</td><td class="roas-bad">0.99x</td><td>—</td><td class="delta-flat">new</td><td>$104.58</td><td>1.25%</td><td><span class="badge lose">cut</span></td></tr>
+        <tr><td><div class="page-name">Compression W v2</div><div class="page-slug">10r-compression-w-v2</div></td><td>$1.8K</td><td class="roas-bad">0.59x</td><td>0.96x</td><td class="delta-dn">-0.37</td><td>$153.20</td><td>1.55%</td><td><span class="badge lose">cut</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- WINNERS -->
+<div class="pane" id="pane-winners">
+  <div class="summary-row" style="grid-template-columns: repeat(3,1fr)">
+    <div class="stat-card"><div class="stat-label">Confirmed winners</div><div class="stat-value">5</div><div class="stat-delta up">pages 1.6x+ ROAS both weeks</div></div>
+    <div class="stat-card"><div class="stat-label">Best ROAS TW</div><div class="stat-value">3.19x</div><div class="stat-delta flat">WL1 · $941 spend</div></div>
+    <div class="stat-card"><div class="stat-label">Highest spend winner</div><div class="stat-value">$36.8K</div><div class="stat-delta up">Evergreen Multi · 2.14x</div></div>
+  </div>
+  <div class="section-header"><div class="section-title">True winners</div><div class="section-sub">Held or improved ROAS week over week</div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Page</th><th>Spend TW</th><th>ROAS TW</th><th>ROAS PW</th><th>Delta</th><th>CPP TW</th><th>AOV</th><th>CVR TW</th></tr></thead>
+      <tbody>
+        <tr><td><div class="page-name">WL1 <span class="badge win">best ROAS</span></div><div class="page-slug">10r-compression-wl1</div></td><td>$941</td><td class="roas-good">3.19x</td><td>1.49x</td><td class="delta-up">+1.70</td><td>$31.36</td><td>$100</td><td>6.16%</td></tr>
+        <tr><td><div class="page-name">Ad-N1 <span class="badge new">new</span></div><div class="page-slug">ad-n1</div></td><td>$2.1K</td><td class="roas-good">2.86x</td><td>—</td><td class="delta-flat">new</td><td>$37.56</td><td>$107</td><td>4.17%</td></tr>
+        <tr><td><div class="page-name">Evergreen Multi <span class="badge win">anchor</span></div><div class="page-slug">a111-evergreen-multi</div></td><td>$36.8K</td><td class="roas-good">2.14x</td><td>2.10x</td><td class="delta-up">+0.04</td><td>$50.38</td><td>$108</td><td>4.00%</td></tr>
+        <tr><td><div class="page-name">Everyday v5</div><div class="page-slug">10r-everyday-v5</div></td><td>$5.9K</td><td class="roas-good">1.88x</td><td>1.46x</td><td class="delta-up">+0.42</td><td>$53.77</td><td>$101</td><td>3.72%</td></tr>
+        <tr><td><div class="page-name">Everyday v6 <span class="badge new">new</span></div><div class="page-slug">10r-everyday-v6</div></td><td>$2.4K</td><td class="roas-good">1.86x</td><td>—</td><td class="delta-flat">new</td><td>$55.51</td><td>$103</td><td>3.57%</td></tr>
+        <tr><td><div class="page-name">Compression W</div><div class="page-slug">10r-compression-w</div></td><td>$8.8K</td><td class="roas-good">1.76x</td><td>1.92x</td><td class="delta-dn">-0.16</td><td>$60.42</td><td>$107</td><td>4.14%</td></tr>
+        <tr><td><div class="page-name">Comp Advertorial</div><div class="page-slug">comp-advertorial</div></td><td>$12.3K</td><td class="roas-good">1.68x</td><td>1.80x</td><td class="delta-dn">-0.12</td><td>$61.56</td><td>$104</td><td>3.31%</td></tr>
+        <tr><td><div class="page-name">Ankle v4</div><div class="page-slug">10r-compression-ankle-v4</div></td><td>$10.7K</td><td class="roas-good">1.69x</td><td>1.35x</td><td class="delta-up">+0.34</td><td>$62.77</td><td>$106</td><td>2.54%</td></tr>
+        <tr><td><div class="page-name">Compression Quiz</div><div class="page-slug">compression-quiz-v1</div></td><td>$10.2K</td><td class="roas-good">1.65x</td><td>1.69x</td><td class="delta-flat">-0.04</td><td>$62.02</td><td>$103</td><td>2.81%</td></tr>
+        <tr><td><div class="page-name">Ad-PF1</div><div class="page-slug">ad-pf1</div></td><td>$556</td><td class="roas-good">2.02x</td><td>2.39x</td><td class="delta-dn">-0.37</td><td>$55.56</td><td>$112</td><td>1.15%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- LOSERS -->
+<div class="pane" id="pane-losers">
+  <div class="summary-row" style="grid-template-columns: repeat(3,1fr)">
+    <div class="stat-card"><div class="stat-label">Pages to cut</div><div class="stat-value">3</div><div class="stat-delta dn">sub 1.0x ROAS</div></div>
+    <div class="stat-card"><div class="stat-label">Wasted spend TW</div><div class="stat-value">~$12K</div><div class="stat-delta dn">SP2 + W-v2 + infomercial</div></div>
+    <div class="stat-card"><div class="stat-label">Biggest leak</div><div class="stat-value">$105.6K</div><div class="stat-delta dn">G1 at 1.37x and falling</div></div>
+  </div>
+
+  <div class="alert red">
+    <div class="alert-label">Cut immediately</div>
+    <div class="alert-body">Infomercial-v1 (0.75x), Compression W v2 (0.59x), and SP2 (0.99x) are all sub or near break-even with no trend improvement. Combined $12.1K in spend this week that should be reallocated.</div>
+  </div>
+
+  <div class="section-header"><div class="section-title">Cut list</div><div class="section-sub">Sub 1.0x ROAS — no path to profitability visible</div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Page</th><th>Spend TW</th><th>ROAS TW</th><th>ROAS PW</th><th>Delta</th><th>CPP TW</th><th>CVR TW</th></tr></thead>
+      <tbody>
+        <tr><td><div class="page-name">Compression W v2 <span class="badge lose">cut</span></div><div class="page-slug">10r-compression-w-v2</div></td><td>$1.8K</td><td class="roas-bad">0.59x</td><td>0.96x</td><td class="delta-dn">-0.37</td><td>$153.20</td><td>1.55%</td></tr>
+        <tr><td><div class="page-name">Infomercial v1 <span class="badge lose">cut</span></div><div class="page-slug">infomercial-v1</div></td><td>$1.9K</td><td class="roas-bad">0.75x</td><td>—</td><td class="delta-flat">new</td><td>$148.69</td><td>1.18%</td></tr>
+        <tr><td><div class="page-name">Compression SP2 <span class="badge lose">cut</span></div><div class="page-slug">10r-compression-sp2</div></td><td>$8.4K</td><td class="roas-bad">0.99x</td><td>—</td><td class="delta-flat">new</td><td>$104.58</td><td>1.25%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-header"><div class="section-title">Watch list</div><div class="section-sub">High spend, declining ROAS — needs investigation or cap</div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Page</th><th>Spend TW</th><th>ROAS TW</th><th>ROAS PW</th><th>Delta</th><th>CPP TW</th><th>CVR TW</th></tr></thead>
+      <tbody>
+        <tr><td><div class="page-name">10r Compression G1 <span class="badge watch">watch</span></div><div class="page-slug">10r-compression-g1 · 276 ads attached</div></td><td>$105.6K</td><td class="roas-bad">1.37x</td><td>1.54x</td><td class="delta-dn">-0.17</td><td>$74.94</td><td>1.92%</td></tr>
+        <tr><td><div class="page-name">10r Trades <span class="badge watch">watch</span></div><div class="page-slug">10r-trades</div></td><td>$34.3K</td><td class="roas-bad">1.36x</td><td>1.52x</td><td class="delta-dn">-0.16</td><td>$77.15</td><td>1.62%</td></tr>
+        <tr><td><div class="page-name">10r Compression <span class="badge watch">watch</span></div><div class="page-slug">10r-compression · core page</div></td><td>$36.5K</td><td class="roas-warn">1.93x</td><td>2.68x</td><td class="delta-dn">-0.75</td><td>$54.97</td><td>2.39%</td></tr>
+        <tr><td><div class="page-name">Compression SP1 <span class="badge watch">watch</span></div><div class="page-slug">10r-compression-sp1</div></td><td>$29.0K</td><td class="roas-bad">1.30x</td><td>1.36x</td><td class="delta-dn">-0.06</td><td>$79.84</td><td>1.75%</td></tr>
+        <tr><td><div class="page-name">Compression Shop <span class="badge watch">watch</span></div><div class="page-slug">10r-compression-shop</div></td><td>$16.7K</td><td class="roas-warn">1.37x</td><td>1.69x</td><td class="delta-dn">-0.32</td><td>$73.93</td><td>2.60%</td></tr>
+        <tr><td><div class="page-name">Trades v2 <span class="badge watch">watch</span></div><div class="page-slug">10r-trades-v2</div></td><td>$2.3K</td><td class="roas-bad">1.12x</td><td>—</td><td class="delta-flat">new</td><td>$84.68</td><td>1.20%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- NET NEW -->
+<div class="pane" id="pane-new">
+  <div class="summary-row" style="grid-template-columns: repeat(3,1fr)">
+    <div class="stat-card"><div class="stat-label">New landers launched</div><div class="stat-value">10</div><div class="stat-delta flat">pages not seen prior wk</div></div>
+    <div class="stat-card"><div class="stat-label">New landers above 1.6x</div><div class="stat-value">5</div><div class="stat-delta up">promising out of gate</div></div>
+    <div class="stat-card"><div class="stat-label">New landers to cut</div><div class="stat-value">3</div><div class="stat-delta dn">infomercial, SP2, trades-v2</div></div>
+  </div>
+  <div class="section-header"><div class="section-title">Net new landers this week</div><div class="section-sub">Pages with spend TW not present in prior week</div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Page</th><th>Spend TW</th><th>ROAS TW</th><th>CPP TW</th><th>AOV</th><th>CVR TW</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td><div class="page-name">WL1</div><div class="page-slug">10r-compression-wl1 · was near-zero PW</div></td><td>$941</td><td class="roas-good">3.19x</td><td>$31.36</td><td>$100</td><td>6.16%</td><td><span class="badge win">scale</span></td></tr>
+        <tr><td><div class="page-name">Ad-N1</div><div class="page-slug">ad-n1</div></td><td>$2.1K</td><td class="roas-good">2.86x</td><td>$37.56</td><td>$107</td><td>4.17%</td><td><span class="badge win">scale</span></td></tr>
+        <tr><td><div class="page-name">WL2</div><div class="page-slug">10r-compression-wl2</div></td><td>$315</td><td class="roas-good">2.13x</td><td>$39.35</td><td>$84</td><td>4.23%</td><td><span class="badge win">scale</span></td></tr>
+        <tr><td><div class="page-name">Everyday v6</div><div class="page-slug">10r-everyday-v6</div></td><td>$2.4K</td><td class="roas-good">1.86x</td><td>$55.51</td><td>$103</td><td>3.57%</td><td><span class="badge win">keep</span></td></tr>
+        <tr><td><div class="page-name">Compression E1</div><div class="page-slug">10r-compression-e1</div></td><td>$2.1K</td><td class="roas-good">1.90x</td><td>$60.02</td><td>$114</td><td>3.09%</td><td><span class="badge win">keep</span></td></tr>
+        <tr><td><div class="page-name">Trades Sock v2</div><div class="page-slug">a102-v2-trades-sock</div></td><td>$707</td><td class="roas-warn">1.67x</td><td>$64.31</td><td>$107</td><td>3.96%</td><td><span class="badge watch">watch</span></td></tr>
+        <tr><td><div class="page-name">Ankle Offer</div><div class="page-slug">10r-compression-ankle-offer</div></td><td>$265</td><td class="roas-warn">1.14x</td><td>$88.29</td><td>$101</td><td>1.61%</td><td><span class="badge watch">watch</span></td></tr>
+        <tr><td><div class="page-name">Trades v2</div><div class="page-slug">10r-trades-v2</div></td><td>$2.3K</td><td class="roas-bad">1.12x</td><td>$84.68</td><td>$95</td><td>1.20%</td><td><span class="badge lose">cut</span></td></tr>
+        <tr><td><div class="page-name">Compression SP2</div><div class="page-slug">10r-compression-sp2</div></td><td>$8.4K</td><td class="roas-bad">0.99x</td><td>$104.58</td><td>$103</td><td>1.25%</td><td><span class="badge lose">cut</span></td></tr>
+        <tr><td><div class="page-name">Infomercial v1</div><div class="page-slug">infomercial-v1</div></td><td>$1.9K</td><td class="roas-bad">0.75x</td><td>$148.69</td><td>$111</td><td>1.18%</td><td><span class="badge lose">cut</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DROPPED -->
+<div class="pane" id="pane-dropped">
+  <div class="section-header"><div class="section-title">Pages dropped from rotation</div><div class="section-sub">Had spend prior week, zero this week — confirm intentional pauses</div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Page</th><th>Spend PW</th><th>ROAS PW</th><th>CPP PW</th><th>CVR PW</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><div class="page-name">10r Ankle P1</div><div class="page-slug">10r-ankle-p1</div></td><td>$4.3K</td><td class="roas-good">1.85x</td><td>$60.73</td><td>1.41%</td><td style="color:var(--muted);font-size:11px">Was profitable — confirm intentional pause</td></tr>
+        <tr><td><div class="page-name">10r Run</div><div class="page-slug">10r-run</div></td><td>$2.7K</td><td class="roas-good">2.08x</td><td>$43.54</td><td>2.17%</td><td style="color:var(--muted);font-size:11px">Was profitable — confirm intentional pause</td></tr>
+        <tr><td><div class="page-name">5r SP Compression v1</div><div class="page-slug">5r-sp-compression-v1</div></td><td>$2.5K</td><td class="roas-warn">1.14x</td><td>$86.26</td><td>1.77%</td><td style="color:var(--muted);font-size:11px">Low ROAS — makes sense to pause</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="padding: 12px 16px; background: var(--surface); border: 1px solid var(--amber-border); border-radius: 8px; margin-top: 4px;">
+    <span style="color: var(--amber); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;">Note — </span>
+    <span style="color: var(--text); font-size: 12px;">10r-ankle-p1 and 10r-run were both profitable last week (1.85x and 2.08x ROAS). If these were paused for creative refresh or testing, that's fine. If unintentional, worth reactivating.</span>
+  </div>
+</div>
+
+<!-- ALL PAGES -->
+<div class="pane" id="pane-all">
+  <div class="section-header"><div class="section-title">All pages with spend this week</div><div class="section-sub">Sorted by spend descending</div></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Page</th><th>Spend TW</th><th>ROAS TW</th><th>ROAS PW</th><th>Delta</th><th>CPP TW</th><th>AOV</th><th>CVR</th><th>Purchases</th></tr></thead>
+      <tbody>
+        <tr><td><div class="page-name">10r Compression G1</div><div class="page-slug">10r-compression-g1</div></td><td>$105.6K</td><td class="roas-bad">1.37x</td><td>1.54x</td><td class="delta-dn">-0.17</td><td>$74.94</td><td>$103</td><td>1.92%</td><td>1,409</td></tr>
+        <tr><td><div class="page-name">Evergreen Multi</div><div class="page-slug">a111-evergreen-multi</div></td><td>$36.8K</td><td class="roas-good">2.14x</td><td>2.10x</td><td class="delta-up">+0.04</td><td>$50.38</td><td>$108</td><td>4.00%</td><td>731</td></tr>
+        <tr><td><div class="page-name">10r Compression</div><div class="page-slug">10r-compression</div></td><td>$36.5K</td><td class="roas-warn">1.93x</td><td>2.68x</td><td class="delta-dn">-0.75</td><td>$54.97</td><td>$106</td><td>2.39%</td><td>664</td></tr>
+        <tr><td><div class="page-name">10r Trades</div><div class="page-slug">10r-trades</div></td><td>$34.3K</td><td class="roas-bad">1.36x</td><td>1.52x</td><td class="delta-dn">-0.16</td><td>$77.15</td><td>$105</td><td>1.62%</td><td>444</td></tr>
+        <tr><td><div class="page-name">Compression SP1</div><div class="page-slug">10r-compression-sp1</div></td><td>$29.0K</td><td class="roas-bad">1.30x</td><td>1.36x</td><td class="delta-dn">-0.06</td><td>$79.84</td><td>$104</td><td>1.75%</td><td>363</td></tr>
+        <tr><td><div class="page-name">Compression Shop</div><div class="page-slug">10r-compression-shop</div></td><td>$16.7K</td><td class="roas-warn">1.37x</td><td>1.69x</td><td class="delta-dn">-0.32</td><td>$73.93</td><td>$101</td><td>2.60%</td><td>226</td></tr>
+        <tr><td><div class="page-name">Comp Advertorial</div><div class="page-slug">comp-advertorial</div></td><td>$12.3K</td><td class="roas-good">1.68x</td><td>1.80x</td><td class="delta-dn">-0.12</td><td>$61.56</td><td>$104</td><td>3.31%</td><td>200</td></tr>
+        <tr><td><div class="page-name">Ankle v4</div><div class="page-slug">10r-compression-ankle-v4</div></td><td>$10.7K</td><td class="roas-good">1.69x</td><td>1.35x</td><td class="delta-up">+0.34</td><td>$62.77</td><td>$106</td><td>2.54%</td><td>170</td></tr>
+        <tr><td><div class="page-name">Compression Quiz v1</div><div class="page-slug">compression-quiz-v1</div></td><td>$10.2K</td><td class="roas-good">1.65x</td><td>1.69x</td><td class="delta-flat">-0.04</td><td>$62.02</td><td>$103</td><td>2.81%</td><td>165</td></tr>
+        <tr><td><div class="page-name">Compression W</div><div class="page-slug">10r-compression-w</div></td><td>$8.8K</td><td class="roas-good">1.76x</td><td>1.92x</td><td class="delta-dn">-0.16</td><td>$60.42</td><td>$107</td><td>4.14%</td><td>145</td></tr>
+        <tr><td><div class="page-name">Compression SP2</div><div class="page-slug">10r-compression-sp2</div></td><td>$8.4K</td><td class="roas-bad">0.99x</td><td>—</td><td class="delta-flat">new</td><td>$104.58</td><td>$103</td><td>1.25%</td><td>80</td></tr>
+        <tr><td><div class="page-name">Everyday v5</div><div class="page-slug">10r-everyday-v5</div></td><td>$5.9K</td><td class="roas-good">1.88x</td><td>1.46x</td><td class="delta-up">+0.42</td><td>$53.77</td><td>$101</td><td>3.72%</td><td>109</td></tr>
+        <tr><td><div class="page-name">10r Run</div><div class="page-slug">10r-run</div></td><td>$6.1K</td><td class="roas-good">1.42x</td><td>2.08x</td><td class="delta-dn">-0.66</td><td>$62.33</td><td>$89</td><td>3.17%</td><td>98</td></tr>
+        <tr><td><div class="page-name">Everyday v6</div><div class="page-slug">10r-everyday-v6</div></td><td>$2.4K</td><td class="roas-good">1.86x</td><td>—</td><td class="delta-flat">new</td><td>$55.51</td><td>$103</td><td>3.57%</td><td>43</td></tr>
+        <tr><td><div class="page-name">Trades v2</div><div class="page-slug">10r-trades-v2</div></td><td>$2.3K</td><td class="roas-bad">1.12x</td><td>—</td><td class="delta-flat">new</td><td>$84.68</td><td>$95</td><td>1.20%</td><td>27</td></tr>
+        <tr><td><div class="page-name">Ad-N1</div><div class="page-slug">ad-n1</div></td><td>$2.1K</td><td class="roas-good">2.86x</td><td>—</td><td class="delta-flat">new</td><td>$37.56</td><td>$107</td><td>4.17%</td><td>56</td></tr>
+        <tr><td><div class="page-name">Compression E1</div><div class="page-slug">10r-compression-e1</div></td><td>$2.1K</td><td class="roas-good">1.90x</td><td>1.53x</td><td class="delta-up">+0.37</td><td>$60.02</td><td>$114</td><td>3.09%</td><td>35</td></tr>
+        <tr><td><div class="page-name">Infomercial v1</div><div class="page-slug">infomercial-v1</div></td><td>$1.9K</td><td class="roas-bad">0.75x</td><td>—</td><td class="delta-flat">new</td><td>$148.69</td><td>$111</td><td>1.18%</td><td>13</td></tr>
+        <tr><td><div class="page-name">Compression W v2</div><div class="page-slug">10r-compression-w-v2</div></td><td>$1.8K</td><td class="roas-bad">0.59x</td><td>0.96x</td><td class="delta-dn">-0.37</td><td>$153.20</td><td>$90</td><td>1.55%</td><td>12</td></tr>
+        <tr><td><div class="page-name">WL1</div><div class="page-slug">10r-compression-wl1</div></td><td>$941</td><td class="roas-good">3.19x</td><td>1.49x</td><td class="delta-up">+1.70</td><td>$31.36</td><td>$100</td><td>6.16%</td><td>30</td></tr>
+        <tr><td><div class="page-name">Ad-PF1</div><div class="page-slug">ad-pf1</div></td><td>$556</td><td class="roas-good">2.02x</td><td>2.39x</td><td class="delta-dn">-0.37</td><td>$55.56</td><td>$112</td><td>1.15%</td><td>10</td></tr>
+        <tr><td><div class="page-name">Trades Sock v2</div><div class="page-slug">a102-v2-trades-sock</div></td><td>$707</td><td class="roas-good">1.67x</td><td>1.30x</td><td class="delta-up">+0.37</td><td>$64.31</td><td>$107</td><td>3.96%</td><td>11</td></tr>
+        <tr><td><div class="page-name">WL2</div><div class="page-slug">10r-compression-wl2</div></td><td>$315</td><td class="roas-good">2.13x</td><td>—</td><td class="delta-flat">new</td><td>$39.35</td><td>$84</td><td>4.23%</td><td>8</td></tr>
+        <tr><td><div class="page-name">Ankle Offer</div><div class="page-slug">10r-compression-ankle-offer</div></td><td>$265</td><td class="roas-warn">1.14x</td><td>0.90x</td><td class="delta-up">+0.24</td><td>$88.29</td><td>$101</td><td>1.61%</td><td>3</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  <span>Hollow Socks · Landing Page Report · Week-over-week comparison</span>
+  <span>TW = this week &nbsp;·&nbsp; PW = prior week &nbsp;·&nbsp; Pages with $0 spend excluded</span>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('pane-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
